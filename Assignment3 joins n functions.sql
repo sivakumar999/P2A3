@@ -6,24 +6,24 @@ filename = 'M:\Simplilearn\mphasis\Phase-2\day-3\Assign3\ExerciseDb_data.mdf')
 
 use ExerciseDb
 ---------------------------------------------------
-CREATE TABLE Companyinfo (
-    CId INT PRIMARY KEY,
-    CName NVARCHAR(100)
-);
-INSERT INTO Companyinfo (CId, CName) VALUES 
+create table Companyinfo (
+    CId int primary key,
+    CName nvarchar(100)
+)
+insert into Companyinfo (CId, CName) values
 (1, 'SamSung'), (2, 'HP '), (3, 'Apple '),(4,'Dell'), (5, 'Toshiba '), (6, 'Redmi')
 
 
-CREATE TABLE Productinfo (
-    PId INT PRIMARY KEY,
-    PName NVARCHAR(100),
-    PPrice DECIMAL(10, 2),
-    PMDate DATE,
-    CId INT,
-    FOREIGN KEY (CId) REFERENCES Companyinfo(CId)
+create table Productinfo (
+    PId int primary key,
+    PName nvarchar(100),
+    PPrice decimal(10, 2),
+    PMDate date,
+    CId int,
+    foreign key (CId) references Companyinfo(CId)
 )
-INSERT INTO Productinfo (PId, PName, PPrice, PMDate, CId)
-VALUES
+insert into Productinfo (PId, PName, PPrice, PMDate, CId)
+values
     (101, ' Laptop', 55000.90, '12/12/2023', 1),
     (102, 'Laptop', 35000.90, '12/12/2012', 2),
     (103, 'Mobile', 15000.90, '12/12/2012', 2),
@@ -36,51 +36,51 @@ VALUES
 	(110, 'Mobile', 55000.70, '12/12/2020', 1)
     
 --Show All  Companies Name and their products detail
-SELECT c.CName, p.PId, p.PName, p.PPrice, p.PMDate
-FROM Companyinfo c
-JOIN Productinfo p ON c.CId = p.CId;
+select c.CName, p.PId, p.PName, p.PPrice, p.PMDate
+from Companyinfo c
+join Productinfo p on c.CId = p.CId;
 
 --Show All products names and their respective company
-SELECT p.PName, c.CName
-FROM Productinfo p
-JOIN Companyinfo c ON p.CId = c.CId;
+select p.PName, c.CName
+from Productinfo p
+join Companyinfo c on p.CId = c.CId;
 
 --show all posible combinations of company and products
-SELECT c.CName, p.PName
-FROM Companyinfo c
-CROSS JOIN Productinfo p;
+select c.CName, p.PName
+from Companyinfo c
+cross join Productinfo p;
 
 
 -----Assign Part2-------
 -- Creating the Products table
-drop table Products
-CREATE TABLE Products (
-    PId INT PRIMARY KEY,
-    PQ INT,
+
+create table Products (
+    PId int primary key,
+    PQ int,
     PPrice float,
     Discount float
 )
 
 -- Inserting sample data into Products table
-INSERT INTO Products (PId, PQ, PPrice, Discount)
-VALUES
-    (1, 3, 15000.00, 0.30),
+insert into Products (PId, PQ, PPrice, Discount)
+values
+    (1, 3, 15000.00, 0.20),
     (2, 5, 5000.00, 0.15),
-    (3, 7, 27000.00, 0.95)
+    (3, 7, 27000.00, 0.35)
 
 -- Creating a function to calculate discounted value
-CREATE FUNCTION CalculateDiscountedValue (@price DECIMAL(10, 2), @discount DECIMAL(5, 2))
-RETURNS DECIMAL(10, 2)
-AS
-BEGIN
-DECLARE @discountedValue DECIMAL(10, 2);
-SET @discountedValue = @price - (@price * @discount);
-RETURN @discountedValue
-END
+create function CalculateDiscountedValue (@price float, @discount float)
+returns float
+as
+begin
+declare @discountedValue float;
+set @discountedValue = @price - (@price * @discount);
+return @discountedValue;
+end;
 
 
-SELECT PId,PPrice AS Price,Discount, dbo.CalculateDiscountedValue(PPrice, Discount) AS DiscountedPrice
-FROM Products;
+select PId,PPrice as Price,Discount, dbo.CalculateDiscountedValue(PPrice, Discount) as DiscountedPrice
+from Products;
 
 
 
